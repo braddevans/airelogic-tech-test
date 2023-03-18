@@ -1,6 +1,7 @@
 'use strict';
-
 const SharedFunctions = {};
+const dotenv = require('dotenv');
+dotenv.config();
 
 SharedFunctions.nhs_multipliers = {
   '1': 10,
@@ -51,7 +52,9 @@ SharedFunctions.is_valid_nhs_number = (nhs_number) => {
 }
 
 SharedFunctions.log_debug = (...args) => {
+  if (process.env.DEBUG) {
     console.log(...args);
+  }
 }
 
 module.exports = SharedFunctions;
