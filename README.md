@@ -27,6 +27,14 @@ https://nodejs.org/en/download/package-manager
 
 ##### windows / linux: 
 ```bash
+copy .env.dist to .env
+or rename it
+
+update the database credentials in the .env 
+```
+
+
+```bash
 npm i
 node .
 ```
