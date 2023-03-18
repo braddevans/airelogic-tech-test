@@ -29,7 +29,7 @@ https://nodejs.org/en/download/package-manager
 
 ## project setup instructions:
 
-##### linux: 
+##### windows / linux: 
 ```bash
 npm i
 node .
