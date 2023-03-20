@@ -39,6 +39,7 @@ class DatabaseHandler {
     }
   }
 
+  // model getters
   get_patient_model() {
     return this.patients;
   }
@@ -49,6 +50,71 @@ class DatabaseHandler {
 
   get_authuser_model() {
     return this.auth_users;
+  }
+
+
+  // ================
+  // CRUD functions
+  // ================
+
+  async create_patient(patient) {
+
+  }
+
+  async create_appointment(appointment) {
+
+  }
+
+  async update_patient(patient) {
+
+  }
+
+  async update_appointment(appointment) {
+
+  }
+
+  async delete_patient(patient) {
+
+  }
+
+  async delete_appointment(appointment) {
+
+  }
+
+  async get_all_patients() {
+
+  }
+
+  async get_all_appointments() {
+
+  }
+
+  async get_patient_by_id(id) {
+
+  }
+
+  async get_appointment_by_id(id) {
+
+  }
+
+  async get_patient_by_nhs_number(nhs_number) {
+
+  }
+
+  async get_appointment_by_appointment_id(appointment_id) {
+
+  }
+
+  async get_appointment_by_patient_id(patient_id) {
+
+  }
+
+  async get_appointment_by_clinician_id(clinician_id) {
+
+  }
+
+  async get_appointment_by_department_id(department_id) {
+
   }
 
 }
