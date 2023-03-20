@@ -26,7 +26,7 @@ class DatabaseHandler {
       port: process.env.DATABASE_PORT,
       dialect: "mysql",
 
-      logging: (...msg) => console.log(msg),
+      logging: console.log,
     });
   }
 
