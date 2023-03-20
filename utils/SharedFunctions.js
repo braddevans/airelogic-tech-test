@@ -3,17 +3,7 @@ const SharedFunctions = {};
 const dotenv = require('dotenv');
 dotenv.config();
 
-SharedFunctions.nhs_multipliers = {
-  '1': 10,
-  '2': 9,
-  '3': 8,
-  '4': 7,
-  '5': 6,
-  '6': 5,
-  '7': 4,
-  '8': 3,
-  '9': 2,
-}
+SharedFunctions.nhs_multipliers = {'1': 10, '2': 9, '3': 8, '4': 7, '5': 6, '6': 5, '7': 4, '8': 3, '9': 2,}
 
 // a
 SharedFunctions.nhs_number_validator = (nhs_number) => {

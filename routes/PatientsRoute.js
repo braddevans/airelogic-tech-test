@@ -1,9 +1,23 @@
 const Router = require('express').Router;
 const router = new Router();
-const authHandler = require('../middleware/authMiddleware');
+const SharedFunctions = require("../utils/SharedFunctions");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
-router.get('/', authHandler.isAuthorized, (req, res) => {
+class patientsRoute {
+  constructor(DatabaseHandler) {
+    this.DatabaseHandler = DatabaseHandler;
+    this.router = router;
+    this.SharedFunctions = SharedFunctions;
 
-})
+    this.router.get('/', (req, res) => {
 
-module.exports = router;
+    })
+  }
+
+  get_router() {
+    return this.router;
+  }
+}
+
+module.exports = patientsRoute;
