@@ -1,10 +1,13 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
+const {DataTypes} = Sequelize;
+
+module.exports = function(sequelize) {
   return sequelize.define('patients', {
     nhs_number: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(99),
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      unique: true
     },
     name: {
       type: DataTypes.STRING(99),
