@@ -1,7 +1,6 @@
 const SharedFunctions = require("../utils/SharedFunctions");
 const express = require("express");
 const Appointment = require("../objects/Appointment");
-const appointments = require("../database/example_data/example_appointments.json");
 const router = express.Router();
 
 class AppointmentsRoute {

@@ -3,7 +3,7 @@ const {Sequelize, Op, Model, DataTypes} = require('sequelize');
 const {initModels} = require("./init-models");
 const {nhs_number_validator, valid_postcode} = require('../utils/SharedFunctions.js');
 const Patient = require('../objects/Patient.js');
-const patients = require("./example_data/example_patients.json");
+const patients = require("../examples/example_patients.json");
 const Appointment = require("../objects/Appointment");
 dotenv.config();
 
@@ -23,8 +23,8 @@ class DatabaseHandler {
   }
 
   async gen_example_data() {
-    const patients = require('./example_data/example_patients.json');
-    const appointments = require('./example_data/example_appointments.json');
+    const patients = require('../examples/example_patients.json');
+    const appointments = require('../examples/example_appointments.json');
     for (let i = 0; i < patients.length; i++) {
       console.log("Adding patient: " + patients[i].nhs_number, ", name:", patients[i].name);
       const patient = new Patient(
