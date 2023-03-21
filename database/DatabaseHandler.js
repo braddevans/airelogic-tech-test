@@ -101,8 +101,6 @@ class DatabaseHandler {
         }
       }
     }
-
-    this.patients.update(patient, {where: {id: patient_id}});
     return true;
   }
 
