@@ -3,6 +3,7 @@ const assert = require('assert');
 
 
 const {nhs_number_validator} = require('../utils/SharedFunctions.js');
+
 // This test passes because it does not throw an exception.
 test("validate 0021403597", async (t) => {
   console.log("is_valid: " + await nhs_number_validator('0021403597'));

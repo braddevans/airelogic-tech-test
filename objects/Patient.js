@@ -1,3 +1,5 @@
+const {nhs_number_validator, valid_postcode} = require('../utils/SharedFunctions.js');
+
 class Patient {
 
   constructor(nhs_number, name, date_of_birth, postcode) {
@@ -17,11 +19,15 @@ class Patient {
   }
 
   get_first_name() {
-    if (this.horrifics.startsWith(this.name.split(" ")[0].toLocaleLowerCase())) {
+    if (this.horrifics.includes(this.name.split(" ")[0].toLocaleLowerCase())) {
       return this.name.split(" ")[1];
     } else {
       return this.name.split(" ")[0];
     }
+  }
+
+  get_last_name() {
+    return this.name.split(" ")[this.name.split(" ").length - 1];
   }
 
   get_date_of_birth() {
@@ -31,4 +37,27 @@ class Patient {
   get_postcode() {
     return this.postcode;
   }
+
+  nhs_number_valid() {
+    return nhs_number_validator(this.nhs_number);
+  }
+
+  postcode_valid() {
+    return valid_postcode(this.postcode);
+  }
+
+  to_json() {
+    return {
+      "nhs_number": this.nhs_number,
+      "nhs_number_valid": this.nhs_number_valid(),
+      "full_name": this.name,
+      "first_name": this.get_first_name(),
+      "last_name": this.get_last_name(),
+      "date_of_birth": this.date_of_birth,
+      "postcode": this.postcode,
+      "postcode_valid": this.postcode_valid()
+    }
+  }
 }
+
+module.exports = Patient;

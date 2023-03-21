@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
+const {DataTypes} = Sequelize;
 
-module.exports = function(sequelize, DataTypes) {
+module.exports = function(sequelize) {
   return sequelize.define('appointments', {
     id: {
       type: DataTypes.STRING(255),
@@ -32,7 +33,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
     patient: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(99),
       allowNull: false,
       references: {
         model: 'patients',

@@ -1,10 +1,9 @@
-const DataTypes = require("sequelize").DataTypes;
 const _appointments = require("./models/appointments");
 const _patients = require("./models/patients");
 
 function initModels(sequelize) {
-  const appointments = _appointments(sequelize, DataTypes);
-  const patients = _patients(sequelize, DataTypes);
+  const appointments = _appointments(sequelize);
+  const patients = _patients(sequelize);
 
   appointments.belongsTo(patients, { as: "patient_patient", foreignKey: "patient"});
   patients.hasMany(appointments, { as: "appointments", foreignKey: "patient"});

@@ -1,6 +1,9 @@
 const dotenv = require('dotenv');
 const {Sequelize, Op, Model, DataTypes} = require('sequelize');
 const {initModels} = require("./init-models");
+const {nhs_number_validator, valid_postcode} = require('../utils/SharedFunctions.js');
+const Patient = require('../objects/Patient.js');
+const patients = require("./example_data/example_patients.json");
 dotenv.config();
 
 class DatabaseHandler {
@@ -18,11 +21,25 @@ class DatabaseHandler {
     this.appointments.sync({force: false})
   }
 
+  async gen_example_data() {
+    const patients = require('./example_data/example_patients.json');
+    for (let i = 0; i < patients.length; i++) {
+      console.log("Adding patient: " + patients[i].nhs_number, ", name:", patients[i].name);
+      const patient = new Patient(
+        patients[i].nhs_number,
+        patients[i].name,
+        patients[i].date_of_birth,
+        patients[i].postcode,
+      );
+      await this.create_patient(patient)
+    }
+  }
+
   create_connection() {
     return new Sequelize(process.env.DATABASE_DATABASE, process.env.DATABASE_USERNAME, process.env.DATABASE_PASSWORD, {
       host: process.env.DATABASE_HOSTNAME,
       port: process.env.DATABASE_PORT,
-      dialect: "mysql",
+      dialect: "mysql", /* one of 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql' | 'db2' | 'snowflake' | 'oracle' */
 
       logging: console.log,
     });
@@ -51,15 +68,42 @@ class DatabaseHandler {
   // ================
 
   async create_patient(patient_object) {
-    return this.patients.create(patient_object);
+    const is_nhs_number_valid = patient_object.nhs_number_valid();
+    const is_postcode_valid = patient_object.postcode_valid();
+    patient_object.name = patient_object.name.replaceAll([",","\"","'"], "");
+    if (is_nhs_number_valid && is_postcode_valid) {
+      return this.patients.create(patient_object);
+    } else {
+      console.log(`Invalid patient (${patient_object.nhs_number}): nhs_number_valid: ${is_nhs_number_valid}, postcode_valid: ${is_postcode_valid}`);
+    }
+
   }
 
   async create_appointment(appointment_object) {
 
   }
 
-  async update_patient(patient_id, patient_object) {
+  // on false one of the updated fields is incorrect
+  async update_patient(patient_id, req_body) {
+    const patient = await this.patients.findByPk(patient_id);
 
+    for (let key in req_body) {
+      if (key === "name") {
+        patient.name = req_body.name;
+      } else if (key === "date_of_birth") {
+        patient.date_of_birth = req_body.date_of_birth;
+      } else if (key === "postcode") {
+        if (valid_postcode(req_body.postcode)) {
+          patient.postcode = req_body.postcode;
+          patient.save();
+        } else {
+          return false
+        }
+      }
+    }
+
+    this.patients.update(patient, {where: {id: patient_id}});
+    return true;
   }
 
 
@@ -70,7 +114,7 @@ class DatabaseHandler {
   }
 
   // nhs number input
-  async delete_patient_by_id(patient_id) {
+  async delete_patient_by_nhs_number(patient_id) {
 
   }
 
@@ -80,22 +124,22 @@ class DatabaseHandler {
   }
 
   async get_all_patients() {
-
+    return this.patients.findAll({
+      raw: true,
+      nest: true
+    });
   }
 
   async get_all_appointments() {
 
   }
 
-  async get_patient_by_id(id) {
-
-  }
-
-  async get_appointment_by_id(id) {
-
-  }
-
   async get_patient_by_nhs_number(nhs_number) {
+    return this.patients.findOne({where: {nhs_number: nhs_number}});
+  }
+
+  // uuid4 input
+  async get_appointment_by_id(id) {
 
   }
 

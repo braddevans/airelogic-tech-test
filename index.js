@@ -1,7 +1,5 @@
 const dotenv = require('dotenv');
 const express = require('express')
-const crypto = require("crypto");
-
 
 dotenv.config();
 main = async () => {
@@ -23,20 +21,18 @@ main = async () => {
   const PatientsRoute = require("./routes/PatientsRoute");
   const AppointmentsRoute = require("./routes/AppointmentsRoute");
 
-  app.use("/patients", isAuthorized, new PatientsRoute(db).get_router())
-  app.use("/appointments", isAuthorized, new AppointmentsRoute(db).get_router())
+  app.use("/patients", new PatientsRoute(db).get_router())
+  app.use("/appointments", new AppointmentsRoute(db).get_router())
 
-  // does not use the AuthMiddleware.isAuthorized middleware
-  // as it would stop the client form authorising to get a token
-  app.use("/auth/login", new LoginRoute(db).get_router())
-
-// not to be used in production
-//app.use("/auth/register", require("./routes/auth/SignupRoute"))
-
+  console.log("count: " + await db.patients.count())
+  if (await db.patients.count() < 1) {
+    await db.gen_example_data();
+  }
 
   app.listen(process.env.HTTP_Port, process.env.HTTP_LISTEN, () => {
     console.log(`Server listening on port ${process.env.HTTP_Port}`)
   })
 }
 
+// no need to use the promise returned from main
 main();
