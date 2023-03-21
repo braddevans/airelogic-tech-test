@@ -24,9 +24,11 @@ main = async () => {
   app.use("/patients", new PatientsRoute(db).get_router())
   app.use("/appointments", new AppointmentsRoute(db).get_router())
 
-  console.log("count: " + await db.patients.count())
-  if (await db.patients.count() < 1) {
-    await db.gen_example_data();
+  if (process.env.USE_EXAMPLE_DATA) {
+    console.log("count: " + await db.patients.count())
+    if (await db.patients.count() < 1) {
+      await db.gen_example_data();
+    }
   }
 
   app.listen(process.env.HTTP_Port, process.env.HTTP_LISTEN, () => {
