@@ -25,7 +25,16 @@ https://nodejs.org/en/download/package-manager
 
 ## project setup instructions:
 
-##### windows / linux: 
+```bash
+git clone https://github.com/braddevans/airelogic-tech-test/
+cd airelogic-tech-test/
+git checkout patient-appointment-backend
+
+# can head directly to docker setup or manual run below
+```
+
+
+### env setup:
 ```bash
 copy .env.dist to .env
 or rename it
@@ -34,7 +43,7 @@ update the database credentials in the .env
 ```
 
 
-
+### bare metal:
 ```bash
 npm i
 node .
@@ -42,17 +51,17 @@ node .
 
 
 
-### alternative container setup:
+### docker container setup:
 ```bash
 sudo docker run -d \
   --name=mariadb \
   -e PUID=1000 \
   -e PGID=1000 \
   -e TZ=Etc/UTC \
-  -e MYSQL_ROOT_PASSWORD=VYTHVTTYwwYig94xO2kbFmKVc04Dj1gYwlUQ8XkRRu2eECkRUOK8DuO99NAapsuwJN6Pezi1wAO0pJcCVK5xSAS \
+  -e MYSQL_ROOT_PASSWORD=longerlongpasswordhere \
   -e MYSQL_DATABASE=prod_database \
   -e MYSQL_USER=prod_user \
-  -e MYSQL_PASSWORD=1UecKiKRbGOWCcmD2UvyweNDB0hgvQsvYIj3ILKFapw7EMIfTWh9TgAostfCpDW77FdsSbv0qB8bvxIWyB5AGG5qATYM \
+  -e MYSQL_PASSWORD=longpasswordhere \
   -p 73306:3306 \
   -v `pwd`/db/:/config \
   --restart unless-stopped \

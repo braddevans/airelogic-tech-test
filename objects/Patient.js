@@ -58,6 +58,15 @@ class Patient {
       "postcode_valid": this.postcode_valid()
     }
   }
+
+  tests() {
+    return {
+      "first_name": this.get_first_name(),
+      "last_name": this.get_last_name(),
+      "nhs_number_valid": this.nhs_number_valid(),
+      "postcode_valid": this.postcode_valid()
+    }
+  }
 }
 
 module.exports = Patient;
