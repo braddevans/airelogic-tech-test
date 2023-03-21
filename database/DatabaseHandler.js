@@ -7,15 +7,13 @@ class DatabaseHandler {
   constructor() {
     this.sequelize = this.create_connection();
     // init the database, create table where doesn't exist
-    const {appointments, auth_users, patients} = initModels(this.sequelize);
+    const {appointments, patients} = initModels(this.sequelize);
 
     this.appointments = appointments;
-    this.auth_users = auth_users;
     this.patients = patients;
   }
 
   async sync_database() {
-    this.auth_users.sync({force: false})
     this.patients.sync({force: false})
     this.appointments.sync({force: false})
   }
@@ -48,36 +46,36 @@ class DatabaseHandler {
     return this.appointments;
   }
 
-  get_authuser_model() {
-    return this.auth_users;
-  }
-
-
   // ================
   // CRUD functions
   // ================
 
-  async create_patient(patient) {
+  async create_patient(patient_object) {
+    return this.patients.create(patient_object);
+  }
+
+  async create_appointment(appointment_object) {
 
   }
 
-  async create_appointment(appointment) {
+  async update_patient(patient_id, patient_object) {
 
   }
 
-  async update_patient(patient) {
+
+  // appointment object will have the following properties:
+  // id, status, time, duration, clinician, department, postcode, patient
+  async update_appointment(appointment_id, appointment_object) {
 
   }
 
-  async update_appointment(appointment) {
+  // nhs number input
+  async delete_patient_by_id(patient_id) {
 
   }
 
-  async delete_patient(patient) {
-
-  }
-
-  async delete_appointment(appointment) {
+  // uuid4
+  async delete_appointment_by_id(appointment_id) {
 
   }
 
@@ -106,14 +104,6 @@ class DatabaseHandler {
   }
 
   async get_appointment_by_patient_id(patient_id) {
-
-  }
-
-  async get_appointment_by_clinician_id(clinician_id) {
-
-  }
-
-  async get_appointment_by_department_id(department_id) {
 
   }
 
