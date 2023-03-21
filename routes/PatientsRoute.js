@@ -68,6 +68,39 @@ class patientsRoute {
           res.status(500).json(err);
         });
     })
+
+    // usage:
+    // POST: {"nhs_number": "1234567891", "name": "John Doe", "date_of_birth": "2000-01-01", "postcode": "AB1 1AB"}
+    this.router.post('/new', (req, res) => {
+      if (req.body.nhs_number === undefined || req.body.name === undefined || req.body.date_of_birth === undefined || req.body.postcode === undefined) {
+        res.status(400).json({
+          "error": "Bad Request",
+          "message": "All fields are required",
+          "status": 400,
+          "fields": {
+            "nhs_number": "valid nhs_number",
+            "name": "name",
+            "date_of_birth": "date of birth",
+            "postcode": "valid uk postcode"
+          }
+        });
+      } else {
+        const patient_obj = new Patient(
+          req.body.nhs_number,
+          req.body.name,
+          req.body.date_of_birth,
+          req.body.postcode,
+        );
+
+        this.DatabaseHandler.create_patient(patient_obj)
+          .then((patient) => {
+            res.status(200).json(patient);
+          })
+          .catch((err) => {
+            res.status(500).json(err);
+          });
+      }
+    })
   }
 
   get_router() {

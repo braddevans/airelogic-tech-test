@@ -42,10 +42,6 @@ class Patient {
     return nhs_number_validator(this.nhs_number);
   }
 
-  postcode_valid() {
-    return valid_postcode(this.postcode);
-  }
-
   to_json() {
     return {
       "nhs_number": this.nhs_number,
@@ -64,7 +60,7 @@ class Patient {
       "first_name": this.get_first_name(),
       "last_name": this.get_last_name(),
       "nhs_number_valid": this.nhs_number_valid(),
-      "postcode_valid": this.postcode_valid()
+      "postcode_valid": valid_postcode(this.postcode)
     }
   }
 }

@@ -4,6 +4,7 @@ const {initModels} = require("./init-models");
 const {nhs_number_validator, valid_postcode} = require('../utils/SharedFunctions.js');
 const Patient = require('../objects/Patient.js');
 const patients = require("./example_data/example_patients.json");
+const Appointment = require("../objects/Appointment");
 dotenv.config();
 
 class DatabaseHandler {
@@ -23,6 +24,7 @@ class DatabaseHandler {
 
   async gen_example_data() {
     const patients = require('./example_data/example_patients.json');
+    const appointments = require('./example_data/example_appointments.json');
     for (let i = 0; i < patients.length; i++) {
       console.log("Adding patient: " + patients[i].nhs_number, ", name:", patients[i].name);
       const patient = new Patient(
@@ -32,6 +34,21 @@ class DatabaseHandler {
         patients[i].postcode,
       );
       await this.create_patient(patient)
+    }
+
+    for (let i = 0; i < appointments.length; i++) {
+      console.log("Adding appointment: " + patients[i].nhs_number, ", name:", patients[i].name);
+      const appointment = new Appointment(
+        appointments[i].id,
+        appointments[i].patient,
+        appointments[i].status,
+        appointments[i].time,
+        appointments[i].duration,
+        appointments[i].clinician,
+        appointments[i].department,
+        appointments[i].postcode,
+      );
+      await this.create_appointment(appointment)
     }
   }
 
@@ -68,19 +85,12 @@ class DatabaseHandler {
   // ================
 
   async create_patient(patient_object) {
-    const is_nhs_number_valid = patient_object.nhs_number_valid();
-    const is_postcode_valid = patient_object.postcode_valid();
-    patient_object.name = patient_object.name.replaceAll([",","\"","'"], "");
-    if (is_nhs_number_valid && is_postcode_valid) {
-      return this.patients.create(patient_object);
-    } else {
-      console.log(`Invalid patient (${patient_object.nhs_number}): nhs_number_valid: ${is_nhs_number_valid}, postcode_valid: ${is_postcode_valid}`);
-    }
-
+    patient_object.name = patient_object.name.replaceAll([",", "\"", "'"], "");
+    return this.patients.create(patient_object);
   }
 
   async create_appointment(appointment_object) {
-
+    return this.appointments.create(appointment_object);
   }
 
   // on false one of the updated fields is incorrect
@@ -110,17 +120,17 @@ class DatabaseHandler {
   async update_appointment(appointment_id, appointment_object) {
     const appointment = await this.appointments.findByPk(appointment_id);
     for (let key in appointment_object) {
-      if (key === "status") {
+      if (key === "status" && ![undefined, null].includes(appointment_object.status)) {
         appointment.status = appointment_object.status;
-      } else if (key === "time") {
+      } else if (key === "time" && ![undefined, null].includes(appointment_object.time)) {
         appointment.time = appointment_object.time;
-      } else if (key === "duration") {
+      } else if (key === "duration" && ![undefined, null].includes(appointment_object.duration)) {
         appointment.duration = appointment_object.duration;
-      } else if (key === "clinician") {
+      } else if (key === "clinician" && ![undefined, null].includes(appointment_object.clinician)) {
         appointment.clinician = appointment_object.clinician;
-      } else if (key === "department") {
+      } else if (key === "department" && ![undefined, null].includes(appointment_object.department)) {
         appointment.department = appointment_object.department;
-      } else if (key === "postcode") {
+      } else if (key === "postcode" && ![undefined, null].includes(appointment_object.postcode)) {
         if (valid_postcode(appointment_object.postcode)) {
           appointment.postcode = appointment_object.postcode;
           appointment.save();
@@ -128,6 +138,7 @@ class DatabaseHandler {
           return false
         }
       }
+      appointment.save();
     }
   }
 
