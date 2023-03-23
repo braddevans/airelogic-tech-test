@@ -51,7 +51,7 @@ class Patient {
       "last_name": this.get_last_name(),
       "date_of_birth": this.date_of_birth,
       "postcode": this.postcode,
-      "postcode_valid": this.postcode_valid()
+      "postcode_valid": valid_postcode(this.postcode)
     }
   }
 
