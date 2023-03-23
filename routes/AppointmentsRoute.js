@@ -19,8 +19,8 @@ class AppointmentsRoute {
         });
     })
 
-    this.router.get('/:id', (req, res) => {
-      this.DatabaseHandler.get_appointment_by_id(String(req.params.id))
+    this.router.get('/:nhs_number', (req, res) => {
+      this.DatabaseHandler.get_appointment_by_id(String(req.params.nhs_number))
         .then((appointment) => {
           const appointment_obj = new Appointment(
             appointment.id,
@@ -39,8 +39,8 @@ class AppointmentsRoute {
         });
     })
 
-    this.router.get('/:id/api_tests', (req, res) => {
-      this.DatabaseHandler.get_appointment_by_id(String(req.params.id))
+    this.router.get('/:nhs_number/tests', (req, res) => {
+      this.DatabaseHandler.get_appointment_by_id(String(req.params.nhs_number))
         .then((appointment) => {
           const appointment_obj = new Appointment(
             appointment.id,
@@ -62,8 +62,8 @@ class AppointmentsRoute {
     // usage:
     // POST: { "clinician": "Ainsley Harriot" }
     // or any field in this list: ["clinician", "department", "status", "time", "patient", "postcode"]
-    this.router.post('/:id/update', (req, res) => {
-      this.DatabaseHandler.get_appointment_by_id(String(req.params.id))
+    this.router.post('/:nhs_number/update', (req, res) => {
+      this.DatabaseHandler.get_appointment_by_id(String(req.params.nhs_number))
         .then(async (old_appointment) => {
           await this.DatabaseHandler.update_appointment(old_appointment.id, req.body);
           res.status(200).json({message: "Appointment updated"});
@@ -75,8 +75,8 @@ class AppointmentsRoute {
 
     // usage:
     // POST: empty body
-    this.router.post('/:id/delete', (req, res) => {
-      this.DatabaseHandler.get_appointment_by_id(String(req.params.id))
+    this.router.post('/:nhs_number/delete', (req, res) => {
+      this.DatabaseHandler.get_appointment_by_id(String(req.params.nhs_number))
         .then(async (appointment) => {
           await this.DatabaseHandler.delete_appointment_by_id(appointment.id)
           res.status(200).json({
@@ -92,7 +92,14 @@ class AppointmentsRoute {
     // usage:
     // POST: {"patient": "1234567891", "status": "pending", "time": "2022-01-01T00:00:00.000Z", "duration": "1h", "clinician": "bob bobington", "department": "psychology", "postcode": "LS13 1AA"}
     this.router.post('/new', (req, res) => {
-      if (req.body.patient == null || req.body.status == null || req.body.time == null || req.body.duration == null || req.body.clinician == null || req.body.department == null || req.body.postcode == null) {
+      if (
+        req.body.patient == null ||
+        req.body.status == null ||
+        req.body.time == null ||
+        req.body.duration == null ||
+        req.body.clinician == null ||
+        req.body.department == null ||
+        req.body.postcode == null) {
         res.status(400).json({
           "error": "Bad Request",
           "message": "All fields are required",
