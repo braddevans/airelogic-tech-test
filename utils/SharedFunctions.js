@@ -5,7 +5,7 @@ dotenv.config();
 
 SharedFunctions.nhs_multipliers = {'1': 10, '2': 9, '3': 8, '4': 7, '5': 6, '6': 5, '7': 4, '8': 3, '9': 2,}
 
-// a
+// adapted to javascript from https://github.com/pfwd/NHSNumber-Validation/blob/master/PHP/NHSValidation.class.php
 SharedFunctions.nhs_number_validator = (nhs_number) => {
   const number = String(nhs_number);
   if (SharedFunctions.is_valid_nhs_number(number)) {
