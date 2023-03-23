@@ -5,6 +5,7 @@ const {nhs_number_validator, valid_postcode} = require('../utils/SharedFunctions
 const Patient = require('../objects/Patient.js');
 const patients = require("../examples/example_patients.json");
 const Appointment = require("../objects/Appointment");
+const appointments = require("../examples/example_appointments.json");
 dotenv.config();
 
 class DatabaseHandler {
@@ -90,7 +91,18 @@ class DatabaseHandler {
   }
 
   async create_appointment(appointment_object) {
-    return this.appointments.create(appointment_object);
+    console.log(appointment_object)
+    const appointment = new Appointment(
+      null,
+      appointment_object.patient,
+      appointment_object.status,
+      appointment_object.time,
+      appointment_object.duration,
+      appointment_object.clinician,
+      appointment_object.department,
+      appointment_object.postcode,
+    );
+    return this.appointments.create(appointment);
   }
 
   // on false one of the updated fields is incorrect
@@ -138,6 +150,7 @@ class DatabaseHandler {
           return false
         }
       }
+      appointment.update_status();
       appointment.save();
     }
   }
