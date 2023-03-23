@@ -13,11 +13,9 @@ class Appointment {
     this.department = department;
     this.postcode = postcode;
 
-    if (this.id === null) {
+    if ([null,undefined].includes(this.id)) {
       this.id = this.generate_id();
     }
-
-    this.update_status();
   }
 
   generate_id() {
@@ -30,7 +28,7 @@ class Appointment {
 
   update_status() {
     const date = Date.parse(this.time)
-    if (["attended", "cancelled"].includes(this.status)) {
+    if (["attended", "cancelled"].includes(this.status.toLocaleLowerCase())) {
       return false;
     } else {
       if (date < Date.now()) {
@@ -58,7 +56,8 @@ class Appointment {
 
   tests() {
     return {
-      "postcode_valid": valid_postcode(this.postcode)
+      "postcode_valid": valid_postcode(this.postcode),
+      "patient_nhs_number_valid": nhs_number_validator(this.patient)
     }
   }
 }
