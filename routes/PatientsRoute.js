@@ -21,7 +21,7 @@ class patientsRoute {
     })
 
     this.router.get('/:nhs_number', (req, res) => {
-      this.DatabaseHandler.get_patient_by_nhs_number(String(req.params.id))
+      this.DatabaseHandler.get_patient_by_nhs_number(String(req.params.nhs_number))
         .then((patients) => {
           res.status(200).json(patients);
         })
@@ -31,7 +31,7 @@ class patientsRoute {
     })
 
     this.router.get('/:nhs_number/tests', (req, res) => {
-      this.DatabaseHandler.get_patient_by_nhs_number(String(req.params.id))
+      this.DatabaseHandler.get_patient_by_nhs_number(String(req.params.nhs_number))
         .then((patient) => {
           const patient_obj = new Patient(
             patient.nhs_number,
@@ -48,7 +48,7 @@ class patientsRoute {
     })
 
     this.router.post('/:nhs_number/update', (req, res) => {
-      this.DatabaseHandler.get_patient_by_nhs_number(String(req.params.id))
+      this.DatabaseHandler.get_patient_by_nhs_number(String(req.params.nhs_number))
         .then(async (patient) => {
           await this.DatabaseHandler.update_patient(patient.id, req.body)
           res.status(200).json(patient);
@@ -59,7 +59,7 @@ class patientsRoute {
     })
 
     this.router.post('/:nhs_number/delete', (req, res) => {
-      this.DatabaseHandler.get_patient_by_nhs_number(String(req.params.id))
+      this.DatabaseHandler.get_patient_by_nhs_number(String(req.params.nhs_number))
         .then(async (patient) => {
           await this.DatabaseHandler.delete_patient_by_nhs_number(patient.id)
           res.status(200).json(patient);
